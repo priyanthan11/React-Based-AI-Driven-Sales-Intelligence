@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import "./DealsTable.css";
 interface Deal {
   opportunity_id: string;
   sales_agent: string;
@@ -33,11 +33,11 @@ export default function DealsTable() {
       <tbody>
         {deals.map((deal) => (
           <tr key={deal.opportunity_id}>
-            <td>{deal.opportunity_id}</td>
-            <td>{deal.sales_agent}</td>
-            <td>{deal.product}</td>
-            <td>{deal.deal_stage}</td>
-            <td>{deal.close_value}</td>
+            <td data-label="ID">{deal.opportunity_id}</td>
+            <td data-label="Agent">{deal.sales_agent}</td>
+            <td data-label="Product">{deal.product}</td>
+            <td data-label="Stage">{deal.deal_stage}</td>
+            <td data-label="Value">{deal.close_value}</td>
           </tr>
         ))}
       </tbody>

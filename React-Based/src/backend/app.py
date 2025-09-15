@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import pandas as pd
 import joblib
+import numpy as np
 
 # Load trained model
 model_path = "C:/Projects/React-Based AI-Driven Sales Intelligence/React-Based/src/models/xgb_sales_model.pkl"
@@ -42,6 +43,31 @@ def predict_deal(request: DealRequest):
         "opportunity_id": request.opportunity_id,
         "win_probability": round(float(win_prob), 4)
     }
+
+
+# --- Next Best Action ----
+@app.post("/recommend_action")
+def recommend_action(request: DealRequest):
+    X = pd.DataFrame[request.features]
+
+    # Align features
+    for col in FEATURE_COLUMNS:
+        if col not in X.columns:
+            X[col] = 0
+    X = X[FEATURE_COLUMNS]
+
+    # Predict next-best-action
+    action_score = model.predict_proba(X)[0]  # multi-class classifer
+    best_idx = int(np.argmax(action_score))
+    best_action = model.classes_[best_idx]
+    confidence = float(action_score[best_idx])
+
+    return {
+        "opportunity_id": request.opportunity_id,
+        "recommended_action": str(best_action),
+        "confidence": round(confidence, 3)
+    }
+
 
 # Health check
 
