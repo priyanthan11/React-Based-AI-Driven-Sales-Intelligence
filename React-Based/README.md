@@ -1,69 +1,120 @@
-# React + TypeScript + Vite
+# 🚀 Sales Win Probability Predictor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack AI-driven application that predicts the probability of closing a sales deal based on historical data.  
+The backend uses **FastAPI** to serve a trained machine learning model (XGBoost / LightGBM), and the frontend is built with **React** for an interactive deals dashboard.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🔹 Features
 
-## Expanding the ESLint configuration
+- Predict sales deal win probability in real-time
+- Interactive React dashboard showing deals, sales agents, and products
+- Color-coded risk bars for quick visualization
+- Easily extensible backend for additional predictive models
+- Batch prediction via CSV upload (planned)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🛠 Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+**Frontend:**
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- React
+- TypeScript
+- Tailwind CSS
+
+**Backend:**
+
+- Python
+- FastAPI
+- Joblib (model serialization)
+
+**Machine Learning:**
+
+- XGBoost / LightGBM
+- Pandas, NumPy
+- Scikit-learn
+
+---
+
+## ⚡ Setup
+
+### Backend
+
+```bash
+git clone <repo-url>
+cd <repo-folder>/backend
+pip install -r requirements.txt
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Place the trained model in the models/ folder (e.g., xgb_sales_model.pkl)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Start FastAPI server:
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+uvicorn main:app --reload
+```
+
+React - based
+
+```
+cd ../frontend
+npm install
+npm start
+
+```
+
+- Open your browser at http://localhost:3000 to view the dashboard
+
+📊 Usage
+
+Each deal row shows: sales agent, product, account, deal stage, close value, and predicted win probability
+
+Color-coded bars indicate high, medium, or low chances of winning a deal
+
+🧠 Model Training
+
+Features used:
+
+- deal_stage, close_value, deal_duration_days
+- Sales agent performance metrics
+- Product categories
+
+Pipeline:
+
+- Clean and preprocess data with pandas
+- Train XGBoost or LightGBM classifier
+- Evaluate with accuracy, F1 score, ROC-AUC
+- Serialize model with joblib for deployment
+
+🔗 API Endpoints:
+POST `/predict_deal` – Returns deal ID and predicted win probability
+
+Request example:
+
+```
+{
+  "opportunity_id": "12345",
+  "sales_agent": "John Doe",
+  "product": "GTX Basic",
+  "account": "Acme Corp",
+  "deal_stage": "Negotiation",
+  "close_value": 50000
+}
+```
+
+Response example:
+
+```
+{
+  "opportunity_id": "12345",
+  "win_probability": 0.72
+}
+```
+
+Future Improvements
+
+- Batch prediction via CSV uploads
+- Real-time model retraining with new sales data
+- Advanced feature engineering (seasonality, agent trends)
+- Dashboard analytics with charts for deals over time
