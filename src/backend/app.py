@@ -20,6 +20,10 @@ class DealRequest(BaseModel):
     opportunity_id: str
     features: dict  # expects keys = trained feature colums
 
+
+@app.get("/")
+def read_root():
+    return {"message": "FastAPI is running!"}
 # Predict endpoint
 
 
@@ -45,29 +49,30 @@ def predict_deal(request: DealRequest):
     }
 
 
-# --- Next Best Action ----
 @app.post("/recommend_action")
 def recommend_action(request: DealRequest):
-    X = pd.DataFrame[request.features]
+    try:
+        X = pd.DataFrame([request.features])
 
-    # Align features
-    for col in FEATURE_COLUMNS:
-        if col not in X.columns:
-            X[col] = 0
-    X = X[FEATURE_COLUMNS]
+        # Align features
+        for col in FEATURE_COLUMNS:
+            if col not in X.columns:
+                X[col] = 0
+        X = X[FEATURE_COLUMNS]
 
-    # Predict next-best-action
-    action_score = model.predict_proba(X)[0]  # multi-class classifer
-    best_idx = int(np.argmax(action_score))
-    best_action = model.classes_[best_idx]
-    confidence = float(action_score[best_idx])
+        # Predict next-best-action
+        action_score = model.predict_proba(X)[0]  # multi-class classifer
+        best_idx = int(np.argmax(action_score))
+        best_action = model.classes_[best_idx]
+        confidence = float(action_score[best_idx])
 
-    return {
-        "opportunity_id": request.opportunity_id,
-        "recommended_action": str(best_action),
-        "confidence": round(confidence, 3)
-    }
-
+        return {
+            "opportunity_id": request.opportunity_id,
+            "recommended_action": str(best_action),
+            "confidence": round(confidence, 3)
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
 # Health check
 

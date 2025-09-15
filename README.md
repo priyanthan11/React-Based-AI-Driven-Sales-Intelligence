@@ -112,9 +112,48 @@ Response example:
 }
 ```
 
-Future Improvements
+![Dashboard Screenshot]("C:/Projects/React-Based AI-Driven Sales Intelligence/React-Based/src/assets/predction.png")
+2️⃣ Recommend Next Best Action
+
+POST /recommend_action – Returns the recommended action for the deal based on the model's prediction scores.
+
+Request example:
+
+```
+{
+  "opportunity_id": "12345",
+  "features": {
+    "deal_duration_days": 45,
+    "engage_month": 10,
+    "agent_total_deals": 20,
+    "agent_win_rate": 0.75,
+    "sales_agent_JohnDoe": 1,
+    "product_XYZ": 1,
+    "account_AcmeCorp": 1
+  }
+}
+
+```
+
+Response example:
+
+```
+{
+  "opportunity_id": "12345",
+  "recommended_action": "Follow-Up",
+  "confidence": 0.83
+}
+```
+
+- recommended_action: The next-best action to increase chances of winning the deal.
+- confidence: The model’s confidence in this recommendation (0–1).
+  Future Improvements
 
 - Batch prediction via CSV uploads
 - Real-time model retraining with new sales data
 - Advanced feature engineering (seasonality, agent trends)
 - Dashboard analytics with charts for deals over time
+
+```
+
+```
