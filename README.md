@@ -112,8 +112,7 @@ Response example:
 }
 ```
 
-![Dashboard Screenshot]("C:/Projects/React-Based AI-Driven Sales Intelligence/React-Based/src/assets/predction.png")
-2️⃣ Recommend Next Best Action
+Recommend Next Best Action
 
 POST /recommend_action – Returns the recommended action for the deal based on the model's prediction scores.
 
